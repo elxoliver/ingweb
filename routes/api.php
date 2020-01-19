@@ -18,11 +18,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/** 
+ * *http://127.0.0.1:8000/api/register
+ * @param body: first_name, last_name, email, store_id, active, username, password, password_confirmation
+ */ 
 Route::post('register', 'StaffController@register');
+
+/**
+ * *http://127.0.0.1:8000/api/login
+ * @param body: username, password
+ */
 Route::post('login', 'StaffController@login');
 
 
 
 Route::group(['middleware' => 'jwt.verify'], function(){
+    /**
+     * *http://127.0.0.1:8000/api/logout
+     * @param body: token
+     */
     Route::post('logout', 'StaffController@logout');
 });

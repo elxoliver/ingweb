@@ -1,0 +1,5 @@
+composer install
+php artisan key:generate
+cambiar los datos del env, de la base de datos, crea una base de datos para la app, y dejalo ingresar con el root
+php artisan migrate --seed
+php artisan serve
