@@ -15,7 +15,7 @@ class CreateStoreTable extends Migration
     {
         Schema::create('store', function (Blueprint $table) {
             $table->bigIncrements('store_id');
-            $table->bigInteger('manager_staff');
+            $table->bigInteger('manager_staff')->nullable();
             $table->bigInteger('address_id');
             $table->timestamps();
         });

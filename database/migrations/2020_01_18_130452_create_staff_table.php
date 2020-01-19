@@ -39,6 +39,12 @@ class CreateStaffTable extends Migration
      */
     public function down()
     {
+        Schema::table('store', function(Blueprint $table) {
+            $table->dropForeign('store_manager_staff_foreign');
+        });
+        Schema::table('staff', function(Blueprint $table) {
+            $table->dropForeign('staff_store_id_foreign');
+        });
         Schema::dropIfExists('staff');
     }
 }
