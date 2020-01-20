@@ -40,9 +40,16 @@ Route::group(['middleware' => 'jwt.verify'], function(){
     Route::post('logout', 'StaffController@logout');
 
     /**
-     * *
+     * * http://127.0.0.1:8000/api/store/{store_id}/register_staff
      * @param url: store_id
      * @param body: token, first_name, last_name, email, store_id, active, username, password, password_confirmation
      */
-    Route::post('register_staff/{store_id}', 'StaffController@register_staff');
+    Route::post('store/{store_id}/register_staff', 'StaffController@register_staff');
+
+    /**
+     * * http://127.0.0.1:8000/api/store/{store_id}/delete_staff/{staff_id}
+     * @param url: store_id, staff_id
+     * @param body: token
+     */
+    Route::delete('delete_staff', 'StaffController@remove_staff');
 });

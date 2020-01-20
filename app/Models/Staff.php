@@ -22,7 +22,7 @@ class Staff extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'username', 'first_name', 'last_name', 'address_id', 'image', 'store_id', 'active','email', 'password',
+        'username', 'admin', 'first_name', 'last_name', 'address_id', 'image', 'store_id', 'active','email', 'password',
     ];
 
     /**

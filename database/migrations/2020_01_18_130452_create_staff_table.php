@@ -19,8 +19,9 @@ class CreateStaffTable extends Migration
             $table->string('last_name');
             $table->bigInteger('address_id');
             $table->string('image')->nullable();
-            $table->bigInteger('store_id');
-            $table->boolean('active');
+            $table->bigInteger('store_id')->nullable();
+            $table->boolean('active')->default(false);
+            $table->boolean('admin')->default(false);
             $table->string('username')->unique();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
