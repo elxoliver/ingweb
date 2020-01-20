@@ -51,5 +51,12 @@ Route::group(['middleware' => 'jwt.verify'], function(){
      * @param url: store_id, staff_id
      * @param body: token
      */
-    Route::post('store/{store_id}/remove_staff/{staff_id}', 'StaffController@remove_staff');
+    Route::post('store/{store_id}/remove_staff/{staff_id}', 'StoreController@remove_staff');
+
+    /**
+     * * http://127.0.0.1:8000/api/store/{store_id}/add_staff/{staff_id}
+     * @param url: store_id, staff_id
+     * @param body: token
+     */
+    Route::post('store/{store_id}/add_staff/{staff_id}', 'StoreController@add_staff');
 });
