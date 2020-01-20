@@ -51,5 +51,5 @@ Route::group(['middleware' => 'jwt.verify'], function(){
      * @param url: store_id, staff_id
      * @param body: token
      */
-    Route::delete('delete_staff', 'StaffController@remove_staff');
+    Route::post('store/{store_id}/remove_staff/{staff_id}', 'StaffController@remove_staff');
 });

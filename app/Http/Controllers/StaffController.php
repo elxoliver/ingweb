@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
+use App\Models\Store;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -93,11 +93,8 @@ class StaffController extends Controller
         if(!$staff)
             return response()->json(['error'=>'User not found'], 404);
 
-        if(!($store = $staff->managed_store))
-            return response()->json(['error'=>'User is not a store admin'], 400);
-
-        if(!$store->store_id == $store_id)
-            return response()->json(['error'=>'An error has ocurred'], 400);
+        if(!($staff->admin))
+            return response()->json(['error'=>'User is not admin'], 400);
 
         $validator = Validator::make($request->all(), [
             'first_name'=>'required|string|max:45',
@@ -114,19 +111,45 @@ class StaffController extends Controller
         if($validator->fails())
             return response()->json($validator->errors()->toJson(), 400);
 
-        $staff = Staff::create([
+        $newStaff = Staff::create([
             'first_name' => $request->get('first_name'),
             'last_name' => $request->get('last_name'),
             'picture' => $request->get('picture'),
             'email' => $request->get('email'),
-            'store_id' => $request->get('store_id'),
             'active' => $request->get('active'),
             'username' => $request->get('username'),
             'password' => $request->get('password'),
             'address_id' => 1
         ]);
-
+        if(!($store = Store::find($store_id)))
+            return response()->json(['error'=>'Store not found'], 400);
+            
         $store->staff_members()->save($staff);
-        return response()->json(compact('staff'), 201);
+        return response()->json(['staff'=>$newStaff], 201);
+    }
+
+
+    
+    public function remove_staff(Request $request, $store_id, $staff_id)
+    {
+        $staff = JWTAuth::parseToken()->authenticate();
+        if(!$staff)
+            return response()->json(['error'=>'User not found'], 404);
+
+        if(!($staff->admin))
+            return response()->json(['error'=>'User is not admin'], 400);
+
+        if(!($store = Store::find($store_id)))
+            return response()->json(['error'=>'Store not found'], 400);
+
+        if(!($deleted_staff = Staff::find($staff_id)))
+            return response()->json(['error'=>'Staff member not found'], 404);
+
+        if(!$deleted_staff->store)
+            return response()->json(['error'=>'Staff member is not in a store'], 400);
+
+        $deleted_staff->store()->dissociate();
+        $deleted_staff->save();
+        return response()->json(['success'=>'Staff removed successfully'], 201);
     }
 }

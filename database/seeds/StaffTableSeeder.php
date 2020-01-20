@@ -19,8 +19,8 @@ class StaffTableSeeder extends Seeder
             'email' => 'javier_administrador@gmail.com',
             'store_id' => 1,
             'active' => true,
-            'username' => 'admin',
-            'password' => Hash::make('admin'),
+            'username' => 'root_user',
+            'password' => 'admin123',
             'address_id' => 1,
             'admin' => true
         ]);
