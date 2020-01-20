@@ -58,5 +58,15 @@ class Staff extends Authenticatable implements JWTSubject
         if ( !empty($password) ) {
             $this->attributes['password'] = bcrypt($password);
         }
-    }    
+    }
+
+    public function store()
+    {
+        return $this->belongsTo('App\Models\Store', 'store_id');
+    }
+
+    public function managed_store()
+    {
+        return $this->hasOne('App\Models\Store', 'manager_staff');
+    }
 }

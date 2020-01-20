@@ -86,4 +86,47 @@ class StaffController extends Controller
 
         return response()->json(compact('staff', 'token'), 201);
     }
+
+    public function register_staff(Request $request, $store_id)
+    {
+        $staff = JWTAuth::parseToken()->authenticate();
+        if(!$staff)
+            return response()->json(['error'=>'User not found'], 404);
+
+        if(!($store = $staff->managed_store))
+            return response()->json(['error'=>'User is not a store admin'], 400);
+
+        if(!$store->store_id == $store_id)
+            return response()->json(['error'=>'An error has ocurred'], 400);
+
+        $validator = Validator::make($request->all(), [
+            'first_name'=>'required|string|max:45',
+            'last_name'=>'required|string|max:45',
+            'picture'=>'string',
+            'email'=>'required|email|unique:staff',
+            'store_id'=>'required|integer',
+            'active'=>'required|boolean',
+            'username'=>'required|string|max:16|unique:staff',
+            'password'=>'required|string|min:8|max:16',
+            'password_confirmation'=>'required|same:password'
+        ]);
+
+        if($validator->fails())
+            return response()->json($validator->errors()->toJson(), 400);
+
+        $staff = Staff::create([
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'picture' => $request->get('picture'),
+            'email' => $request->get('email'),
+            'store_id' => $request->get('store_id'),
+            'active' => $request->get('active'),
+            'username' => $request->get('username'),
+            'password' => $request->get('password'),
+            'address_id' => 1
+        ]);
+
+        $store->staff_members()->save($staff);
+        return response()->json(compact('staff'), 201);
+    }
 }

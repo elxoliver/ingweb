@@ -38,4 +38,11 @@ Route::group(['middleware' => 'jwt.verify'], function(){
      * @param body: token
      */
     Route::post('logout', 'StaffController@logout');
+
+    /**
+     * *
+     * @param url: store_id
+     * @param body: staff_id(admin), first_name, last_name, email, store_id, active, username, password, password_confirmation
+     */
+    Route::post('register_staff/{store_id}', 'StaffController@register_staff');
 });
